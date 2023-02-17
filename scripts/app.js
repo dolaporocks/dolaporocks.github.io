@@ -20,6 +20,32 @@
         }
     }
 
+    function AjaxRequest(method, url, callback){
+
+        let xhr = new XMLHttpRequest();
+
+        //step 2
+        xhr.addEventListener("readystatechange", () =>{
+
+            if(xhr.readyState === 4 && xhr.status === 200){
+                callback(xhr.responseText);
+            }
+        });
+
+        //step 3
+        xhr.open(method, url);
+
+        //STEP 4
+        xhr.send();
+    }
+
+    function LoadHeader(data){
+        $("header").html(data)
+        $(`li>a:contains(${document.title})`).addClass("active");
+
+        CheckLogin();
+    }
+
     function DisplayHomePage() {
         console.log("Display Home Page called");
 
@@ -53,6 +79,7 @@
 
     function DisplayProductsPage(){
         console.log("Display Products Page called");
+
     }
 
     function DisplayAboutUsPage(){
@@ -61,8 +88,46 @@
     function DisplayServicesPage(){
         console.log("Display Services Page called");
     }
+
+    function ContactFormValidation(){
+        ValidateField("#fullName",
+            /^([A-Z][a-z]{1,3}\.?\s)?([A-Z][a-z]+)+([\s,-]([A-Z][a-z]+))*$/,
+            "Please enter a valid firstName and lastName (ex. Mr. Peter Parker)");
+
+        ValidateField("#contactNumber",
+            /^(\+\d{1,3}[\s-.])?\(?\d{3}\)?[\s-.]?\d{3}[\s-.]\d{4}$/,
+            "Please enter a valid Contact Number (ex. 416-555-5555");
+
+        ValidateField("#emailAddress",
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/,
+            "Please enter a valid Email Address(ex. username@isp.com");
+    }
+
+    function ValidateField(input_field_id, regular_expression, error_message){
+
+        let messageArea = $("#messageArea");
+
+        $(input_field_id).on("blur", function (){
+            let inputFieldText = $(this).val();
+            if(!regular_expression.test(inputFieldText)){
+                //fail validation
+                $(this).trigger("focus").trigger("select"); //go back to the fullName text
+                messageArea.addClass("alert alert-danger").text(error_message).show();
+
+
+            }else{
+                //pass validation
+                messageArea.removeAttr("class").hide();
+            }
+
+        })
+    }
+
     function DisplayContactPage(){
         console.log("Display Contact Page called");
+
+        ContactFormValidation();
+
         let sendButton = document.getElementById("sendButton");
         let subscribeBox = document.getElementById("subscribeCheckbox");
 
@@ -133,6 +198,9 @@
 
    function DisplayEditPage(){
         console.log("Display Edit Page called");
+
+        ContactFormValidation();
+
         let page = location.hash.substring(1);
         switch(page){
             case "add":
@@ -181,8 +249,68 @@
         }
     }
 
+    function DisplayLoginPage(){
+        console.log("Display Register Page called");
+
+        let messageArea = $("#messageArea");
+        messageArea.hide();
+
+        $("#loginButton").on("click", function(){
+
+            let success = false;
+            let newUser = new core.User();
+
+            $.get("./data/user.json", function(){
+
+                for(const u of data.users){
+                    if(username.value === u.Username && password.valueOf === u.Password){
+                        success = true;
+                        newUser.fromJSON(u);
+                        break;
+                    }
+                }
+
+                if(success){
+                    sessionStorage.setItem("user", newUser.serialize());
+                    messageArea.removeAttr("class").hide();
+                    location.href = "contact-list.html";
+                }else{
+                    //fails validation
+                    $("#username").trigger("focus").trigger("select");
+                    messageArea.addClass("alert alert-danger").text("Error, failed to" +
+                        " authenticate, please check credentials. ");
+                }
+
+            });
+        });
+        $("#cancelButton").on("click", function(){
+            document.forms[0].reset();
+            location.href="index.html";
+        });
+    }
+
+    function CheckLogin(){
+        if(sessionStorage.getItem("user")){
+
+            $("#login").html(` <a class="nav-link" href="#">
+            <i class="fa-solid fa-sign-out-alt"></i> Logout</a>`)
+
+        }
+
+        $("#logout").on("click", function(){
+            sessionStorage.clear();
+            location.href = "index.html";
+        })
+    }
+
+    function DisplayRegisterPage(){
+        console.log("Display Register Page called");
+    }
+
     function Start(){
         console.log("Application Started");
+        AjaxRequest("GET", "header.html", LoadHeader);
+
         switch(document.title){
             case "Home":
                 DisplayHomePage();
@@ -204,6 +332,12 @@
                 break
             case "Edit Contact":
                 DisplayEditPage();
+                break;
+            case "Login":
+                DisplayLoginPage();
+                break;
+            case "Register":
+                DisplayRegisterPage();
                 break;
         }
     }
