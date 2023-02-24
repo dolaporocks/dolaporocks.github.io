@@ -1,3 +1,8 @@
+/*
+Name: Dolapo Adesina
+Student ID: 100816149
+Date Completed: 24th February, 2023.
+ */
 "use strict";
 //IIFE - Immediately Invoked Function Expression
 //AKA - Anonymous Self-Executing Function
@@ -20,6 +25,31 @@
         }
     }
 
+    /**
+     * Instantiate add user to local storage.
+     * @param firstName
+     * @param lastName
+     * @param emailAddress
+     * @param username
+     * @param password
+     * @constructor
+     */
+    function AddUser(firstName, lastName, emailAddress, username, password){
+        let user = new core.User(firstName, lastName, emailAddress, firstName+lastName, password);
+
+        if(user.serialize()){
+            let key = user.FirstName.substring(0,1) + Date.now();
+            localStorage.setItem(key, user.serialize());
+        }
+    }
+
+    /**
+     * Ajax request method.
+     * @param method
+     * @param url
+     * @param callback
+     * @constructor
+     */
     function AjaxRequest(method, url, callback){
 
         let xhr = new XMLHttpRequest();
@@ -39,6 +69,11 @@
         xhr.send();
     }
 
+    /**
+     * Function to Load the header for all the pages depending on the document title.
+     * @param data
+     * @constructor
+     */
     function LoadHeader(data){
         $("header").html(data)
         $(`li>a:contains(${document.title})`).addClass("active");
@@ -46,6 +81,10 @@
         CheckLogin();
     }
 
+    /**
+     * Function call to displayHomePage
+     * @constructor
+     */
     function DisplayHomePage() {
         console.log("Display Home Page called");
 
@@ -77,18 +116,23 @@
 
     }
 
+    /**
+     * Function to displayproducts page.
+     * @constructor
+     */
     function DisplayProductsPage(){
         console.log("Display Products Page called");
 
     }
-
+    //functio for the displayabout us page
     function DisplayAboutUsPage(){
         console.log("Display About Page called");
     }
+    //function for the displayservices page.
     function DisplayServicesPage(){
         console.log("Display Services Page called");
     }
-
+    //method that performs validation on the fields in the contact form.
     function ContactFormValidation(){
         ValidateField("#fullName",
             /^([A-Z][a-z]{1,3}\.?\s)?([A-Z][a-z]+)+([\s,-]([A-Z][a-z]+))*$/,
@@ -103,11 +147,17 @@
             "Please enter a valid Email Address(ex. username@isp.com");
     }
 
+    //method that is passed to the functions for validating using the arguments.
     function ValidateField(input_field_id, regular_expression, error_message){
 
         let messageArea = $("#messageArea");
 
         $(input_field_id).on("blur", function (){
+
+            if(input_field_id === $("#confirmPassword")){
+                regular_expression = new RegExp(document.querySelector("#password").value)
+            }
+
             let inputFieldText = $(this).val();
             if(!regular_expression.test(inputFieldText)){
                 //fail validation
@@ -122,7 +172,7 @@
 
         })
     }
-
+//function that displays the contact form page.
     function DisplayContactPage(){
         console.log("Display Contact Page called");
 
@@ -138,9 +188,7 @@
             }
         });
     }
-
-
-
+    //function that displays the contact list page.
     function DisplayContactListPage(){
         console.log("Display ContactList Page called");
 
@@ -196,7 +244,11 @@
         }
     }
 
-   function DisplayEditPage(){
+    /**
+     * function for the displayedit page.
+     * @constructor
+     */
+    function DisplayEditPage(){
         console.log("Display Edit Page called");
 
         ContactFormValidation();
@@ -204,21 +256,21 @@
         let page = location.hash.substring(1);
         switch(page){
             case "add":
-                    $("main>h1").text("Add Contact");
-                    $("#editButton").html(`<i class="fas fa-plus-circle fa-sm"></i> Add`);
+                $("main>h1").text("Add Contact");
+                $("#editButton").html(`<i class="fas fa-plus-circle fa-sm"></i> Add`);
 
-                    $("#editButton").on("click", (event) => {
+                $("#editButton").on("click", (event) => {
 
-                        event.preventDefault();
-                        AddContact(fullName.value, contactNumber.value, emailAddress.value);
-                        location.href="contact-list.html";
-                    })
+                    event.preventDefault();
+                    AddContact(fullName.value, contactNumber.value, emailAddress.value);
+                    location.href="contact-list.html";
+                })
 
-                    $("#cancelButton").on("click", () => {
-                        location.href="contact-list.html";
-                    })
+                $("#cancelButton").on("click", () => {
+                    location.href="contact-list.html";
+                })
 
-                    break;
+                break;
             default:{
                 //edit
                 let contact = new core.Contact();
@@ -245,10 +297,14 @@
                 })
 
             }
-            break;
+                break;
         }
     }
 
+    /**
+     * Function that performs all of the display login page options including the errors thrown
+     * @constructor
+     */
     function DisplayLoginPage(){
         console.log("Display Register Page called");
 
@@ -260,12 +316,12 @@
             let success = false;
             let newUser = new core.User();
 
-            $.get("./data/user.json", function(){
+            $.get("./data/user.json", function(data){
 
                 for(const u of data.users){
-                    if(username.value === u.Username && password.valueOf === u.Password){
-                        success = true;
+                    if(username.value === u.Username && password.value === u.Password){
                         newUser.fromJSON(u);
+                        success = true;
                         break;
                     }
                 }
@@ -273,12 +329,20 @@
                 if(success){
                     sessionStorage.setItem("user", newUser.serialize());
                     messageArea.removeAttr("class").hide();
-                    location.href = "contact-list.html";
+
+                    let ContactLink = document.getElementsByTagName("li")[4];
+                    let NameLink = document.createElement("a");
+
+                    NameLink.innerHTML = `<a class="nav-link" href="#"><i class="fas fa-user-alt"></i> 
+                    ${newUser.FirstName} ${newUser.LastName}</a>`
+                    ContactLink.insertAdjacentElement("afterend", NameLink);
+                    document.forms[0].reset();
+                    //location.href = "contact-list.html";
                 }else{
                     //fails validation
                     $("#username").trigger("focus").trigger("select");
                     messageArea.addClass("alert alert-danger").text("Error, failed to" +
-                        " authenticate, please check credentials. ");
+                        " authenticate, please check credentials. ").show();
                 }
 
             });
@@ -289,9 +353,12 @@
         });
     }
 
+    /**
+     * Function that checks if the user is logged in and then changes the login to logout.
+     * @constructor
+     */
     function CheckLogin(){
-        if(sessionStorage.getItem("user")){
-
+        if(sessionStorage.getItem("user")) {
             $("#login").html(` <a class="nav-link" href="#">
             <i class="fa-solid fa-sign-out-alt"></i> Logout</a>`)
 
@@ -303,8 +370,52 @@
         })
     }
 
+    /**
+     * Method that performs validation on all the fields in the register form.
+     * @constructor
+     */
+    function RegisterFormValidation(){
+        ValidateField("#FirstName",
+            /^([A-Z][a-z]{1,3}\.?\s)?([A-Z][a-z]+)*$/,
+            "Please enter a valid firstName (ex. Mr. Peter)");
+
+        ValidateField("#lastName",
+            /^([A-Z][a-z]+)$/,
+            "Please enter a valid lastName (ex. Parker)");
+
+        ValidateField("#emailAddress",
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,10}$/,
+            "Please enter a valid Email Address(ex. username@isp.com");
+
+        ValidateField("#password",
+            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            "Please ensure that password entered is in the right format. (ex.Throw2pass)");
+
+        ValidateField("#confirmPassword",
+            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            "Please ensure that both passwords entered match ");
+    }
+
+    /**
+     * Function for display register page. and makes use of the registerformvalidation method.
+     * @constructor
+     */
     function DisplayRegisterPage(){
         console.log("Display Register Page called");
+
+        RegisterFormValidation();
+
+        $("#registerButton").on("click", (event) => {
+            event.preventDefault();
+
+            AddUser(FirstName.value, lastName.value, emailAddress.value, FirstName.value
+                + lastName.value, password.value);
+
+            console.log(FirstName.value, lastName.value, emailAddress.value, FirstName.value
+                + lastName.value, password.value);
+
+            document.forms[0].reset();
+        });
     }
 
     function Start(){

@@ -1,3 +1,10 @@
+/*
+Name: Dolapo Adesina
+Student ID: 100816149
+Date Completed: 24th February, 2023.
+Creating a contact class that creates a constructor for the inputs entered by the user and certain
+methods for implementatin in local storage.
+ */
 "use strict";
 
 (function (core){
