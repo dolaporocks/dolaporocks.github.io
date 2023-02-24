@@ -69,11 +69,7 @@ Date Completed: 24th February, 2023.
         xhr.send();
     }
 
-    /**
-     * Function to Load the header for all the pages depending on the document title.
-     * @param data
-     * @constructor
-     */
+
     function LoadHeader(data){
         $("header").html(data)
         $(`li>a:contains(${document.title})`).addClass("active");
@@ -81,10 +77,7 @@ Date Completed: 24th February, 2023.
         CheckLogin();
     }
 
-    /**
-     * Function call to displayHomePage
-     * @constructor
-     */
+
     function DisplayHomePage() {
         console.log("Display Home Page called");
 
@@ -116,15 +109,12 @@ Date Completed: 24th February, 2023.
 
     }
 
-    /**
-     * Function to displayproducts page.
-     * @constructor
-     */
+
     function DisplayProductsPage(){
         console.log("Display Products Page called");
 
     }
-    //functio for the displayabout us page
+    //function for the displayabout us page
     function DisplayAboutUsPage(){
         console.log("Display About Page called");
     }
@@ -244,10 +234,7 @@ Date Completed: 24th February, 2023.
         }
     }
 
-    /**
-     * function for the displayedit page.
-     * @constructor
-     */
+
     function DisplayEditPage(){
         console.log("Display Edit Page called");
 
@@ -301,10 +288,7 @@ Date Completed: 24th February, 2023.
         }
     }
 
-    /**
-     * Function that performs all of the display login page options including the errors thrown
-     * @constructor
-     */
+
     function DisplayLoginPage(){
         console.log("Display Register Page called");
 
@@ -353,10 +337,7 @@ Date Completed: 24th February, 2023.
         });
     }
 
-    /**
-     * Function that checks if the user is logged in and then changes the login to logout.
-     * @constructor
-     */
+
     function CheckLogin(){
         if(sessionStorage.getItem("user")) {
             $("#login").html(` <a class="nav-link" href="#">
@@ -370,10 +351,7 @@ Date Completed: 24th February, 2023.
         })
     }
 
-    /**
-     * Method that performs validation on all the fields in the register form.
-     * @constructor
-     */
+
     function RegisterFormValidation(){
         ValidateField("#FirstName",
             /^([A-Z][a-z]{1,3}\.?\s)?([A-Z][a-z]+)*$/,
@@ -396,10 +374,7 @@ Date Completed: 24th February, 2023.
             "Please ensure that both passwords entered match ");
     }
 
-    /**
-     * Function for display register page. and makes use of the registerformvalidation method.
-     * @constructor
-     */
+
     function DisplayRegisterPage(){
         console.log("Display Register Page called");
 
