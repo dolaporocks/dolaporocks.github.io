@@ -9,7 +9,7 @@ Date Completed: 24th February, 2023.
 
 (function(){
 
-   
+
     function AddContact(fullName, contactNumber, emailAddress){
         let contact = new core.Contact(fullName, contactNumber, emailAddress);
 
@@ -89,12 +89,11 @@ Date Completed: 24th February, 2023.
 
     }
 
-
     function DisplayProductsPage(){
         console.log("Display Products Page called");
 
     }
-    //function for the displayabout us page
+    //functio for the displayabout us page
     function DisplayAboutUsPage(){
         console.log("Display About Page called");
     }
