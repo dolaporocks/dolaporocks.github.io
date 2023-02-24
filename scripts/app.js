@@ -9,13 +9,7 @@ Date Completed: 24th February, 2023.
 
 (function(){
 
-    /**
-     *Instantiate and contact to local storage
-     * @param {string} fullName
-     * @param {string} contactNumber
-     * @param {string} emailAddress
-     * @constructor
-     */
+   
     function AddContact(fullName, contactNumber, emailAddress){
         let contact = new core.Contact(fullName, contactNumber, emailAddress);
 
@@ -25,15 +19,7 @@ Date Completed: 24th February, 2023.
         }
     }
 
-    /**
-     * Instantiate add user to local storage.
-     * @param firstName
-     * @param lastName
-     * @param emailAddress
-     * @param username
-     * @param password
-     * @constructor
-     */
+
     function AddUser(firstName, lastName, emailAddress, username, password){
         let user = new core.User(firstName, lastName, emailAddress, firstName+lastName, password);
 
@@ -43,13 +29,7 @@ Date Completed: 24th February, 2023.
         }
     }
 
-    /**
-     * Ajax request method.
-     * @param method
-     * @param url
-     * @param callback
-     * @constructor
-     */
+
     function AjaxRequest(method, url, callback){
 
         let xhr = new XMLHttpRequest();
