@@ -455,7 +455,7 @@
             let newUser = new core.User();
 
             // uses jQuery shortcut to load the users.json file
-            $.get("./Data/users.json", function(data)
+            $.get("./data/users.json", function(data)
             {
                 // for every user in the users.json file
                 for (const user of data.users) 
