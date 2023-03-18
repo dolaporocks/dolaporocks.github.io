@@ -1,67 +1,52 @@
-/*
-Name: Dolapo Adesina
-Student ID: 100816149
-Date Completed: 24th February, 2023.
-Creating a contact class that creates a constructor for the inputs entered by the user and certain
-methods for implementatin in local storage.
- */
 "use strict";
-
-(function (core){
-    class Contact{
-
-        constructor(fullName, contactNumber, emailAddress) {
-            //It's a call to the setter that's why its in that case.
-            this.FullName = fullName;
-            this.ContactNumber = contactNumber;
-            this.EmailAddress = emailAddress;
-
+var core;
+(function (core) {
+    class Contact {
+        m_fullName;
+        m_contactNumber;
+        m_emailAddress;
+        get FullName() {
+            return this.m_fullName;
         }
-
-        set FullName(fullName){
-            this.myFullName = fullName;
+        set FullName(fullName) {
+            this.m_fullName = fullName;
         }
-
-        get FullName(){
-            return this.myFullName;
+        get ContactNumber() {
+            return this.m_contactNumber;
         }
-
-        set ContactNumber(contactNumber){
-            this.myContactNumber = contactNumber;
+        set ContactNumber(contactNumber) {
+            this.m_contactNumber = contactNumber;
         }
-
-        get ContactNumber(){
-            return this.myContactNumber;
+        get EmailAddress() {
+            return this.m_emailAddress;
         }
-
-        set EmailAddress(emailAddress){
-            this.myEmailAddress = emailAddress;
+        set EmailAddress(emailAddress) {
+            this.m_emailAddress = emailAddress;
         }
-
-        get EmailAddress(){
-            return this.myEmailAddress;
+        constructor(fullName = "", contactNumber = "", emailAddress = "") {
+            this.m_fullName = fullName;
+            this.m_contactNumber = contactNumber;
+            this.m_emailAddress = emailAddress;
         }
-
-        toString(){
-            return `Full Name: ${this.FullName}\n Contact Number: ${this.ContactNumber}\n EmailAddress: ${this.EmailAddress}`;
-        }
-
-        serialize(){
-            if(this.FullName !== "" && this.ContactNumber !== "" && this.EmailAddress !== "") {
-                return `${this.FullName}, ${this.ContactNumber}, ${this.EmailAddress}`;
+        serialize() {
+            if (this.FullName !== "" && this.ContactNumber !== "" && this.EmailAddress !== "") {
+                return `${this.FullName},${this.ContactNumber},${this.EmailAddress}`;
             }
-            console.error("One or more of the attributes is empty or missing");
-            return null;
-
+            else {
+                console.error("One or more properties of the Contact are missing or empty");
+                return null;
+            }
         }
-
-        deserialize(data){
-
-            let propertyArray = data.split(",")
+        deserialize(data) {
+            let propertyArray = data.split(",");
             this.FullName = propertyArray[0];
             this.ContactNumber = propertyArray[1];
             this.EmailAddress = propertyArray[2];
         }
+        toString() {
+            return `Full Name     : ${this.FullName}\nContact Number: ${this.ContactNumber}\nEmail Address : ${this.EmailAddress}`;
+        }
     }
     core.Contact = Contact;
 })(core || (core = {}));
+//# sourceMappingURL=contact.js.map
